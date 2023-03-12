@@ -5,6 +5,6 @@ from aiogram import types
 
 @dp.message_handler(text='📍 Локація')
 async def enter_phone(message: types.Message):
-    message_text = '🚩 "The Power of Identity пройде" в місті Ужгород, на вулиці вул. Крилова 10, 2-й поверх в KameLotHub Space'
+    message_text = '🚩 "The Power of Identity" пройде в місті Ужгород, на вулиці вул. Крилова 10, 2-й поверх в KameLotHub Space'
 
     await message.answer(text=message_text, reply_markup=menu)
