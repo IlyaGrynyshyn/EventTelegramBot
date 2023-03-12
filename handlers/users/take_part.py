@@ -18,7 +18,6 @@ async def take_part(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data == 'will_come')
 async def will_come(call: CallbackQuery):
-    logging.info(f'callback_data = {call.data}')
     db.update_type_visit('offline', call.from_user.id)
     await call.message.answer(
         f'🙌 Супер, вхідний квиток буде коштувати 700 гривень.\n'
