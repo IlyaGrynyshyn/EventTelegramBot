@@ -8,13 +8,21 @@ from loader import dp, db
 
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message, state: FSMContext):
-    message_text = """Привіт, друже! Чим я можу тобі допомогти?
+    message_text = """
+    Привіт, прекрасна💌
+
+Я твій провідник на захід *The Power of Identity*. 
     """
     if db.exist_user(telegram_id=message.from_user.id):
         await message.answer(message_text, reply_markup=menu)
     else:
-        message_text = """Привіт, друже! Я твій провідник на івент SMM.
-        Щоб зареєструватись, залиш будь ласка свої дані 👇🏻 
+        message_text = """
+        Привіт, прекрасна💌
+
+Я твій провідник на захід 
+*The Power of Identity*.  
+
+Щоб зареєструватись, залиш будь ласка свої дані 👇🏻
         """
         db.add_user(name=message.from_user.full_name, telegram_id=message.from_user.id)
         await message.answer(message_text)

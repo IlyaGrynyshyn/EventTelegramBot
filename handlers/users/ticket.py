@@ -32,5 +32,5 @@ async def take_part(message: types.Message, state: FSMContext):
         Оплачено : {pay}
             """
     else:
-        message_text = '❗ У вас поки що не має квитка, щоб купити його натисність на кнопку "Взяти участь"'
+        message_text = '❗️ У вас поки що немає квитка, щоб купити його натисність на кнопку "Взяти участь"'
     await message.answer(text=message_text, reply_markup=menu)

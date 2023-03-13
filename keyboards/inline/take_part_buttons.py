@@ -10,7 +10,7 @@ type_of_visit = InlineKeyboardMarkup(row_width=2,
                                                  callback_data="will_come"
                                              ),
                                              InlineKeyboardButton(
-                                                 text='👨‍💻 Я буду онлайн',
+                                                 text='👩‍💻 Я буду онлайн',
                                                  callback_data='will_online'
                                              )
                                          ]
