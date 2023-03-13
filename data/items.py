@@ -8,7 +8,7 @@ item1 = Item(
     prices=[
         LabeledPrice(
             label='Вхідний квиток',
-            amount=700_00
+            amount=777_00
         )
     ], start_parameter='create_invoice_will_come',
     need_phone_number=True,
