@@ -13,7 +13,9 @@ ALENA MAER, яка і буде вести вас протягом усього �
 
 А також протягом "Панельної Дискусії" ви познайомитесь із ученицями курсу SMM&PSYCHOLOGY. Якщо ти хочеш дізнатись більше про них - тицяй кнопки нижче🔥
     """
-    await message.answer(text, reply_markup=speakers)
+    photo = InputFile(path_or_bytesio='data/images/photo_2023-03-14_01-06-51.jpg', filename='Alena')
+    await bot.send_photo(chat_id=message.from_user.id, photo=photo, caption=text, reply_markup=speakers)
+    # await message.answer(text, reply_markup=speakers)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'Dana')
