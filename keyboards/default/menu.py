@@ -13,6 +13,9 @@ menu = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='❓ Допомога'),
             KeyboardButton(text='📦 Про івент')
+        ],
+        [
+            KeyboardButton(text='ℹ Інформація')
         ]
     ], resize_keyboard=True
 )

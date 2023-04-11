@@ -72,4 +72,8 @@ class Database:
         sql = "SELECT * FROM Users WHERE telegram_id=? AND is_payed=1"
         return self.execute(sql, parameters=(telegram_id,), fetchone=True)
 
+    def select_all_payed_user(self):
+        sql = "SELECT * FROM Users WHERE is_payed=1 AND type_visit='offline'"
+        return self.execute(sql, fetchall=True)
+
 

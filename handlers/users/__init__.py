@@ -6,3 +6,5 @@ from . import take_part
 from . import ticket
 from . import about_us
 from . import speakers
+from . import information
+from .all_payed_user import all_users
