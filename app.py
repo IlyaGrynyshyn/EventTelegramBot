@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import executor
 
 from loader import dp, db
@@ -19,4 +21,5 @@ async def on_startup(dispatcher):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup)
+    loop = asyncio.get_event_loop()
+    executor.start_polling(dp, loop=loop, on_startup=on_startup)

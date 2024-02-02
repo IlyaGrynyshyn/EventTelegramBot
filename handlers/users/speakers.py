@@ -3,8 +3,10 @@ from aiogram.types import CallbackQuery, InputFile
 from keyboards.inline import speakers
 
 from loader import dp, bot
+from utils.misc import rate_limit
 
 
+@rate_limit(2)
 @dp.message_handler(text='🧑 Спікери')
 async def bot_help(message: types.Message):
     text = """
@@ -17,7 +19,7 @@ ALENA MAER, яка і буде вести вас протягом усього �
     await bot.send_photo(chat_id=message.from_user.id, photo=photo, caption=text, reply_markup=speakers)
     # await message.answer(text, reply_markup=speakers)
 
-
+@rate_limit(4)
 @dp.callback_query_handler(lambda c: c.data == 'Dana')
 async def speaker_info(call: CallbackQuery):
     text = """
@@ -35,7 +37,7 @@ async def speaker_info(call: CallbackQuery):
     await call.answer(cache_time=30)
     # await call.message.answer(text)
 
-
+@rate_limit(2)
 @dp.callback_query_handler(lambda c: c.data == 'Liza')
 async def speaker_info(call: CallbackQuery):
     text = """

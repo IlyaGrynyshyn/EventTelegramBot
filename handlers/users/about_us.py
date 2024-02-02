@@ -3,8 +3,10 @@ from keyboards.default import menu
 from aiogram.dispatcher.filters.builtin import CommandHelp
 
 from loader import dp
+from utils.misc import rate_limit
 
 
+@rate_limit(4)
 @dp.message_handler(text='📦 Про івент')
 async def bot_help(message: types.Message):
     text = """
