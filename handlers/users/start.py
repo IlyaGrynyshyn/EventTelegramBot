@@ -15,7 +15,7 @@ async def bot_start(message: types.Message, state: FSMContext):
     Привіт, прекрасна💌
 Я твій провідник на захід *The Power of Identity*. 
     """
-    if await db.exist_user(telegram_id=message.from_user.id):
+    if db.exist_user(telegram_id=message.from_user.id):
         await message.answer(message_text, reply_markup=menu)
     else:
         message_text = """
@@ -24,7 +24,7 @@ async def bot_start(message: types.Message, state: FSMContext):
 *The Power of Identity*, що пройде 29го квітня, у м. Ужгород 🫧
 Щоб зареєструватись, залиш будь ласка свої дані 👇🏻
         """
-        await db.add_user(name=message.from_user.full_name, telegram_id=message.from_user.id)
+        db.add_user(name=message.from_user.full_name, telegram_id=message.from_user.id)
         await message.answer(message_text)
         await message.answer(text='📱 Напиши мені свій номер телефону.')
         await message.answer(text='⬇️⁣')
