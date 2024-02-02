@@ -1,14 +1,16 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import CallbackQuery, LabeledPrice
+from aiogram.types import CallbackQuery, LabeledPrice, ContentType
 from data import config
 from keyboards.default import menu
-from keyboards.inline import type_of_visit
+from keyboards.inline import type_of_visit, cancel_bth
 from loader import dp, db, bot
 from data.items import item1
 from states.will_online_state import Will_Online
+from utils.misc import rate_limit
 
 
+@rate_limit(4)
 @dp.message_handler(text='🤝 Взяти участь')
 async def take_part(message: types.Message):
     await message.answer('🤔 Як ти плануєш відвідати захід?', reply_markup=type_of_visit)
@@ -16,7 +18,7 @@ async def take_part(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data == 'will_come')
 async def will_come(call: CallbackQuery):
-    db.update_type_visit('offline', call.from_user.id)
+    await db.update_type_visit('offline', call.from_user.id)
     await call.message.answer(
         f'''
         Бути офлайн - це твій найкращий внесок у свій розвиток, потрапити в інфополе таких же яскравих дівчат, отримати безцінний досвід і нарешті ближче познайомитись з розвитком в соц мережах. 
@@ -28,15 +30,15 @@ async def will_come(call: CallbackQuery):
     )
     await call.answer(cache_time=30)
     await bot.send_invoice(call.from_user.id,
-                           **item1.generate_invoice(), payload='123')
+                           **item1.generate_invoice(), payload=f'{call.from_user.id}')
 
 
 @dp.callback_query_handler(lambda c: c.data == 'will_online')
 async def will_online(call: CallbackQuery):
     await call.answer(cache_time=30)
-    db.update_type_visit('online', call.from_user.id)
+    await db.update_type_visit('online', call.from_user.id)
     await call.message.answer(
-       f"""
+        f"""
        Ми раді твоїй участі, навіть якщо не зможемо побачити та обійняти тебе, але будемо знати, шо ти присутня на заході ОНЛАЙН🔥
 
 Ми пам’ятаємо, що всі наші можливості стаються завдяки ЗСУ, саме тому ціну за такий онлайн формат обираєте ви.
@@ -68,23 +70,29 @@ async def get_amount(message: types.Message, state: FSMContext):
                                    ], start_parameter='create_invoice_will_come',
                                    need_phone_number=True,
                                    provider_token=config.PROVIDER_TOKEN,
-                                   payload='11223')
+                                   payload=str(message.from_user.id))
             await state.finish()
+            await message.answer('Для оплати натисни на кнопку "Оплатити"', reply_markup=menu)
     except ValueError:
-        await message.answer('Ви ввели некоректну суму. ')
+        await message.answer('Ви ввели некоректну суму. Введіть суму від 50 до 2000 ')
+        await state.update_data()
 
 
-@dp.pre_checkout_query_handler()
+@dp.pre_checkout_query_handler(lambda query: True)
 async def process_pre_checkout_query(query: types.PreCheckoutQuery):
     await bot.answer_pre_checkout_query(pre_checkout_query_id=query.id, ok=True)
-    db.update_is_pay(query.from_user.id)
+
+
+@dp.message_handler(content_types=ContentType.SUCCESSFUL_PAYMENT)
+async def successful_payment(message: types.Message):
+    await db.update_is_pay(message.from_user.id)
     message_text = """
-    Оплата пройшла успішно❤️‍🔥
+           Оплата пройшла успішно❤️‍🔥
 
-🤗 Ми раді, що ти приєднаєшся до нашого заходу.
+       🤗 Ми раді, що ти приєднаєшся до нашого заходу.
 
-Тепер твій квиток 🎟️ буде доступний у розділі *Мій квиток*
+       Тепер твій квиток 🎟️ буде доступний у розділі *Мій квиток*
 
-🪄Приєднуйся до нашого телеграм каналу та слідкуй за усіма новинами: https://t.me/+LP5wYwzkN9xmYzM6
-    """
-    await bot.send_message(chat_id=query.from_user.id, text=message_text, reply_markup=menu)
+       🪄Приєднуйся до нашого телеграм каналу та слідкуй за усіма новинами: https://t.me/+LP5wYwzkN9xmYzM6
+           """
+    await bot.send_message(chat_id=message.chat.id, text=message_text, reply_markup=menu)

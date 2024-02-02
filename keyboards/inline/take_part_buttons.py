@@ -15,3 +15,13 @@ type_of_visit = InlineKeyboardMarkup(row_width=2,
                                              )
                                          ]
                                      ])
+
+cancel_bth = InlineKeyboardMarkup(row_width=1,
+                                  inline_keyboard=[
+                                      [
+                                          InlineKeyboardButton(
+                                              text="Повернутися на головну",
+                                              callback_data="cansel"
+                                          )
+                                      ]
+                                  ])
